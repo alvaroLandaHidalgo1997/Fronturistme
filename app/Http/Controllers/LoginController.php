@@ -11,12 +11,14 @@ use \Firebase\JWT\JWT;
 class LoginController extends Controller
 {
     
-
 	public function login()
 	{
 		$key = $this->key;
 
-		if($_POST["email"] == null or $_POST["password"] == null){return response(204);}
+		if($_POST["email"] == null or $_POST["password"] == null)
+			{
+				return response(204);
+			}
 
 		$user = User::where('email', $_POST['email'])->first();
 
@@ -26,7 +28,7 @@ class LoginController extends Controller
 			return response(401); // mail no autorizado 
 		}
 
-		if($_POST["password"] == $user->password)
+		if($_POST["password"] == decrypt($user->password))
 		{
 			$tokenParams = [
 				'user' => $user,
@@ -42,10 +44,5 @@ class LoginController extends Controller
 			return response(400); // Respuesta contraseña incorrecta
 		}
 
-
-
 	}
-
-
-
 }

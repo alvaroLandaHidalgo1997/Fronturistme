@@ -19,10 +19,14 @@ class CreatePlacesTable extends Migration
             $table->string('description');
             $table->string('startDate');
             $table->string('endDate');
-            $table->float('coordX');
-            $table->float('coordY');
-            $table->integer('user_id');
+            $table->double('coordX');
+            $table->double('coordY');
+            $table->integer('user_id')->unsigned();
             $table->timestamps();
+            $table->rememberToken();
+        });
+        Schema::table('places', function(Blueprint $table){
+            $table->foreign('id')->references('id')->('users');
         });
     }
 
