@@ -13,5 +13,5 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected $key = '47asfasdSDgasdgFsd571Hsa2';
+    protected $key = 'asiioipkdnfsdSDasdadwdasaasd';
 }

@@ -15,19 +15,26 @@ class LoginController extends Controller
 	{
 		$key = $this->key;
 
-		if($_POST["email"] == null or $_POST["password"] == null)
-			{
-				return response(204);
-			}
-
+		if($_POST["email"] == null or $_POST["password"] == null or $_POST["email"] == "" or $_POST["password"] == "" )
+		{
+			return response()->json([
+                    'message' => 'todos los campos deben rellenarse', 'code' => 400
+                ], 400);
+		}
 		$user = User::where('email', $_POST['email'])->first();
 
 		if (empty($user))
 		{
-
-			return response(401); // mail no autorizado 
+			return response()->json([
+                    'message' => 'el email introducido no es valido', 'code' =>401
+                ], 400); // mail no autorizado 
 		}
-
+		if($user->role_id == 2){
+			return response()->json([
+                    'message' => 'no tienes permisos de administrador'
+                ],400);
+			
+		}
 		if($_POST["password"] == decrypt($user->password))
 		{
 			$tokenParams = [
@@ -41,8 +48,12 @@ class LoginController extends Controller
 		}
 		else
 		{
-			return response(400); // Respuesta contraseña incorrecta
+			return response()->json([
+                    'message' => 'contraseña incorrecta', 'code' => 400
+                ], 400);
 		}
 
 	}
+
+
 }

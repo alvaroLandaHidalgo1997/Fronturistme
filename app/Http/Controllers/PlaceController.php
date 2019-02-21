@@ -124,6 +124,59 @@ class PlaceController extends Controller
      */
     public function destroy(Place $place)
     {
-        //
+        $headers = getallheaders();
+        $token = $headers['Authorization'];
+        $key = $this->key;
+        $userData = JWT::decode($token, $key, array('HS256'));
+        $id_user = User::where('email',$userData->email)->first()->id;
+        $id_place = $_POST['id'];
+        $id = $id_place;
+        $place = Place::find($id);
+        if (is_null($place)) {
+          return $this->error(400,'el lugar no existe');
+          }else{
+            $place_name = Place::where('id',$id_place)->first()->name;
+            Place::destroy($id);
+            return $this->success('lugar borrado', $place_name);
+          }
+    }
+    public function updatePlace()
+    {
+        $headers = getallheaders();
+        $token = headers['Authorization'];
+        $key = $this->key;
+        $userData = JWT::decode($token,$key, array('HS256'));
+        $id_place = $_POST['id'];
+        $newName = $_POST['newname'];
+        $newDescription = $_POST['description'];
+        $coordX = $_POST['newCoordX'];
+        $coordY = $_POST['newCoordY'];
+        $startdate = $_POST['newStartDate'];
+        $enddate = $_POST['newEndDate'];
+        $place = Place::find($id_place);
+
+        if (is_null($place)) {
+          return $this->error(400,'el lugar no existe');
+
+        }if(!empty($_POST['description'])){
+          $place->description = $newDescription;
+        }
+        if(!empty($_POST['newname'])){
+          $place->name = $newName;
+        }
+        if(!empty($_POST['newCoordX'])){
+          $place->coordenadaX = $coordX;
+        }
+        if(!empty($_POST['newCoordY'])){
+          $place->coordenadaY = $coordY;
+        }
+        if(!empty($_POST['startDate'])){
+          $place->startDate = $startdate;
+        }
+        if(!empty($_POST['endDate'])){
+          $place->endDate = $enddate;
+        }
+        $place->save();
+        return response(200, "sitio modificado");
     }
 }
