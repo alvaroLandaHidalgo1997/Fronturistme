@@ -22,7 +22,6 @@ class PlaceController extends Controller
       $token = $headers['Authorization'];
       $user = JWT::decode($token, $key, array('HS256'));
       $idUser = $user->user->id;
-
       $userPlaces = Place::where('user_id', $idUser)->get();
 
       $places = [];
@@ -30,7 +29,6 @@ class PlaceController extends Controller
         foreach ($userPlaces as $place){
           $places[] = $place;
         }
-      
         return response()->json([
         'places'=> $places,
         ]);
@@ -59,18 +57,16 @@ class PlaceController extends Controller
       $headers = getallheaders();
       $token = $headers['Authorization'];
       $user = JWT::decode($token, $key, array('HS256'));
-
-       
       $place = new Place();
       $place->title = $request->title;
       $place->description = $request->description;
       $place->startDate = $request->startDate;
       $place->endDate = $request->endDate;
-      $place->coordX = $request->coordX;
-      $place->coordY = $request->coordY;
+      $place->coordenadaX = $request->coordenadaX;
+      $place->coordenadaY = $request->coordenadaY;
       $place->user_id = $user->user->id;
 
-        if ($request->title == null or $request->description == null or $request->startDate == null or $request->endDate == null or $request->coordX == null or $request->coordY == null)
+        if ($request->title == null or $request->description == null or $request->startDate == null or $request->endDate == null or $request->coordenadaX == null or $request->coordenadaY == null)
       {
 
         return response(204);
@@ -147,12 +143,12 @@ class PlaceController extends Controller
         $key = $this->key;
         $userData = JWT::decode($token,$key, array('HS256'));
         $id_place = $_POST['id'];
-        $newName = $_POST['newname'];
+        $newName = $_POST['title'];
         $newDescription = $_POST['description'];
-        $coordX = $_POST['newCoordX'];
-        $coordY = $_POST['newCoordY'];
-        $startdate = $_POST['newStartDate'];
-        $enddate = $_POST['newEndDate'];
+        $coordX = $_POST['coordenadaX'];
+        $coordY = $_POST['coordenadaY'];
+        $startdate = $_POST['startDate'];
+        $enddate = $_POST['endDate'];
         $place = Place::find($id_place);
 
         if (is_null($place)) {
@@ -161,13 +157,13 @@ class PlaceController extends Controller
         }if(!empty($_POST['description'])){
           $place->description = $newDescription;
         }
-        if(!empty($_POST['newname'])){
+        if(!empty($_POST['title'])){
           $place->name = $newName;
         }
-        if(!empty($_POST['newCoordX'])){
+        if(!empty($_POST['coordenadaX'])){
           $place->coordenadaX = $coordX;
         }
-        if(!empty($_POST['newCoordY'])){
+        if(!empty($_POST['coordenadaY'])){
           $place->coordenadaY = $coordY;
         }
         if(!empty($_POST['startDate'])){

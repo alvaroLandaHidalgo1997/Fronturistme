@@ -60,6 +60,7 @@ class UserController extends Controller
 
         if($_POST["passwordConfirm"] == $_POST["password"])
         {  
+            
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = encrypt($request->password);
@@ -89,7 +90,7 @@ class UserController extends Controller
         $key = $this->key;
         $userData = JWT::decode($headers['Authorization'],$key, array('HS256'));
 
-        if ($request->newname==null or $request->newEmail==null or $request->newPassword==null) 
+        if ($request->newname==null && $request->newEmail==null && $request->newPassword==null) 
         {
              return response()->json([
                     'message' => 'no has modificado ningún campo', 'code' => 404
